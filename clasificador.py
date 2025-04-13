@@ -15,6 +15,7 @@ import base64
 import hmac
 import hashlib
 import requests
+import gradio as gr
 
 class ReconocedorACRCloud:
     """
@@ -177,21 +178,53 @@ def identificar_musica(ruta_audio):
             return f"Error en el reconocimiento: {mensaje_error} (Código: {codigo_error})"
     except Exception as e:
         return f"Error al procesar la respuesta: {str(e)}\nRespuesta cruda: {str(resultado)}"
+    
+def procesar_audio(audio):
+    """
+    Procesa el audio ya grabado y lo identifica
+    """
+    if audio is None:
+        return "Por favor, graba o sube un archivo de audio."
+    
+    # El audio puede ser un archivo temporal o un path
+    ruta_audio = audio
 
-# Ejemplo de uso básico
+    print("Identificando música en:", ruta_audio)
+    resultado = identificar_musica(ruta_audio)
+    return resultado
+
+# Iniciar la aplicación con Gradio
 if __name__ == "__main__":
     print("=" * 70)
     print("Clasificador de Géneros Musicales")
     print("Desarrollado por: José Eduardo Williams (23-EISN-2-048)")
     print("=" * 70)
+    print("Iniciando aplicación...")
+
+    # Crear la interfaz con Gradio
+    with gr.Blocks(title="Clasificador de Géneros Musicales") as app:
+        gr.Markdown("# Clasificador de Géneros Musicales")
+        gr.Markdown("Desarrollado por José Eduardo Williams (23-EISN-2-048)")
+
+        with gr.Row():
+            with gr.Column():
+                gr.Markdown("""
+                ### Instrucciones de Uso:
+                1. Graba un fragmento de audio (mínimo 10 segundos) o sube un archivo de música.
+                2. Haz clic en "Identificar Canción".
+                3. Espera mientras se procesa la identificación.
+                4. Revisa los resultados que incluyen título, artista, álbum y género musical.
+                """)
+
+                entrada_audio = gr.Audio(type="filepath", label="Audio")
+                boton_enviar = gr.Button("Identificar Canción", variant="primary")
+
+            with gr.Column():
+                salida = gr.Textbox (label="Resultado del Reconocimiento", lines=10)
+        
+        boton_enviar.click(fn=procesar_audio, inputs=entrada_audio, outputs=salida)
     
-    # Solicitar al usuario la ruta del archivo
-    ruta_audio = input("Ingrese la ruta del archivo de audio a identificar: ")
-    
-    # Procesar e imprimir el resultado
-    print("\nIdentificando música...")
-    resultado = identificar_musica(ruta_audio)
-    print("\nResultado:")
-    print(resultado)
-    
+    app.launch()
+
+    print("¡Gracias por usar el Clasificador de Géneros Musicales!")
     print("=" * 70)
