@@ -142,8 +142,8 @@ def identificar_musica(ruta_audio):
     # Configuración de ACRCloud
     configuracion = {
         'host': 'identify-us-west-2.acrcloud.com',
-        'access_key': '4867bdcd3b13539fcb6d51646e5b8fe8',
-        'access_secret': 'riaQ5V5792fgnUqeB9CT9AoG3bm2O3YAniCEtTlO',
+        'access_key': '359eaa0733e652b80379ed82bb137a4b',
+        'access_secret': 'J5lX3rxcnwe4ORpLWsJ9SROlRXSwNm6fqdjd8PbA',
         'timeout': 10,
         'debug': True
     }
@@ -335,6 +335,7 @@ if __name__ == "__main__":
                 4. Haz clic en "Identificar Canción".
                 5. Espera mientras se procesa la identificación.
                 6. Revisa los resultados que incluyen título, artista, álbum y género musical.
+                7. En caso de que el audio no se escuche, debes volver a grabarlo y continuar disfrutando del clasificador.
                 """)
 
                 # 2. Sección para grabar o subir audio
@@ -344,11 +345,11 @@ if __name__ == "__main__":
                     entrada_audio = gr.Audio(type="filepath", label="Audio")
 
                 with gr.Row():
-                    boton_enviar = gr.Button("Identificar Canción", variant="primary")
+                    boton_enviar = gr.Button("Identificar la Canción", variant="primary")
 
                 # 3. Finalmente el resultado
                 with gr.Row():
-                    salida = gr.Textbox (label="Resultado del Reconocimiento", lines=10)
+                    salida = gr.Textbox (label="El Resultado de La Predicción es:", lines=10)
 
                 boton_enviar.click(fn=procesar_audio, inputs=entrada_audio, outputs=salida)
 
